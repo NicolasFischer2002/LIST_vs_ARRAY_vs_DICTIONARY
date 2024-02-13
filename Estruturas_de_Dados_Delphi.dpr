@@ -2,7 +2,7 @@ program Estruturas_de_Dados_Delphi;
 
 uses
   Vcl.Forms,
-  Start in '..\..\Documents\Embarcadero\Studio\Projects\Start.pas' {F_Start};
+  Start in '..\..\Desenvolvimento\GitHub\Delphi\LIST_vs_ARRAY_vs_DICTIONARY_DELPHI\LIST_vs_ARRAY_vs_DICTIONARY_DELPHI\Start.pas' {F_Start};
 
 {$R *.res}
 
