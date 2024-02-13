@@ -98,7 +98,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\..\Desenvolvimento\GitHub\Delphi\LIST_vs_ARRAY_vs_DICTIONARY_DELPHI\LIST_vs_ARRAY_vs_DICTIONARY_DELPHI\Start.pas">
+        <DCCReference Include="Start.pas">
             <Form>F_Start</Form>
         </DCCReference>
         <BuildConfiguration Include="Base">
