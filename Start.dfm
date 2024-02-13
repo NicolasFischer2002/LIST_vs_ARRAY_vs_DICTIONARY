@@ -2,8 +2,8 @@ object F_Start: TF_Start
   Left = 0
   Top = 0
   Caption = 'Start'
-  ClientHeight = 511
-  ClientWidth = 884
+  ClientHeight = 510
+  ClientWidth = 880
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,8 +13,8 @@ object F_Start: TF_Start
   Position = poScreenCenter
   TextHeight = 15
   object Lbl_Titulo: TLabel
-    Left = 51
-    Top = 45
+    Left = 74
+    Top = 53
     Width = 215
     Height = 18
     Caption = 'Estruturas de dados em Delphi'
@@ -26,7 +26,7 @@ object F_Start: TF_Start
     ParentFont = False
   end
   object Lbl_ComprarEstruturas: TLabel
-    Left = 50
+    Left = 68
     Top = 131
     Width = 222
     Height = 18
@@ -39,10 +39,10 @@ object F_Start: TF_Start
     ParentFont = False
   end
   object Memo_Resultados: TMemo
-    Left = 368
+    Left = 364
     Top = 0
     Width = 516
-    Height = 511
+    Height = 510
     Align = alRight
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -86,7 +86,7 @@ object F_Start: TF_Start
     OnClick = Btn_ListvsArrayvsDictionaryClick
   end
   object Btn_ListContainsvsListBinarySearchvsDictionary: TButton
-    Left = 8
+    Left = 5
     Top = 254
     Width = 354
     Height = 25

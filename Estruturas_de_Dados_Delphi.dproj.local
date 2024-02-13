@@ -2,9 +2,9 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2024/02/10 18:05:50.000.812,=C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2024/02/10 18:06:08.000.843,C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Start.dfm=C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
-    <Transaction>2024/02/10 18:06:08.000.843,C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Start.pas=C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2024/02/10 18:06:18.000.652,C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Estruturas_de_Dados_Delphi.dproj=C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
-    <Transaction>2024/02/11 10:25:55.000.098,C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Estruturas_de_Dados_Delphi.dproj=C:\Users\Micro\Desktop\Estruturas_de_Dados_Delphi\Estruturas_de_Dados_Delphi.dproj</Transaction>
+    <Transaction>2024/02/10 18:06:08.000.843,C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Start.dfm</Transaction>
+    <Transaction>2024/02/10 18:06:08.000.843,C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Start.pas</Transaction>
+    <Transaction>2024/02/10 18:06:18.000.652,C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Estruturas_de_Dados_Delphi.dproj</Transaction>
+    <Transaction>2024/02/11 10:25:55.000.098,C:\Users\Micro\Desktop\Estruturas_de_Dados_Delphi\Estruturas_de_Dados_Delphi.dproj=C:\Users\Micro\Documents\Embarcadero\Studio\Projects\Estruturas_de_Dados_Delphi.dproj</Transaction>
   </Transactions>
 </BorlandProject>
