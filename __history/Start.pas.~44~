@@ -1,0 +1,574 @@
+unit Start;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, System.Generics.Collections,Vcl.Graphics, Vcl.Controls,
+  Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, System.DateUtils;
+
+type
+  TF_Start = class(TForm)
+    Memo_Resultados: TMemo;
+    Lbl_Titulo: TLabel;
+    Lbl_ComprarEstruturas: TLabel;
+    Btn_ListvsArray: TButton;
+    Btn_ListvsArrayvsDictionary: TButton;
+    Pnl_ListContainsvsListIndexOfvsListBinarySearchvsDictionary: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    procedure Btn_ListvsArrayClick(Sender: TObject);
+    procedure Btn_ListvsArrayvsDictionaryClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Pnl_ListContainsvsListIndexOfvsListBinarySearchvsDictionaryClick(
+      Sender: TObject);
+  private
+    { Private declarations }
+    procedure PreparaListaBase(var ListaBase: TList<Integer>; TamanhoAproximadoLista: Integer);
+
+     procedure PreencheListaDeInteiros
+               (var Lista: TList<Integer>; var ListaBase: TList<Integer>;
+                ExibirRelatorioInsercoes: Bool);
+
+     procedure PreencheArrayDeInteiros
+               (var Array_: array of Integer; var ListaBase: TList<Integer>;
+                ExibirRelatorioInsercoes: Bool);
+
+     procedure PreencheDicionarioDeInteiros
+               (var DicionarioInteirosAleatorios: TDictionary<Integer, Bool>;
+                var ListaBase: TList<Integer>; ExibirRelatorioInsercoes: Bool);
+
+     procedure TesteDesempenhoListaContains
+               (var Lista: TList<Integer>; var ListaInteirosAleatoriosBuscar: TList<Integer>);
+
+     procedure TesteDesempenhoArrayContains
+               (var Array_: array of Integer; var ListaInteirosAleatoriosBuscar: TList<Integer>);
+
+     procedure TesteDesempenhoDicionarioContains
+               (var Dicionario: TDictionary<Integer, Bool>;
+               var ListaInteirosAleatoriosBuscar: TList<Integer>);
+
+     procedure TesteDesempenhoBinarySearch
+               (var Lista: TList<Integer>; var ListaInteirosAleatoriosBuscar: TList<Integer>);
+
+     procedure ExibeRelatorioInsercoes
+     (NumeroElementosEstrutura: Integer; Segundos: Integer; Estrutura: String);
+
+     procedure ExibeRelatorioDesempenho
+     (NumeroElementosEstrutura: Integer; NumeroDeBuscas: Integer;
+     MetodoBusca: String ;Segundos: Integer; Estrutura: String;
+     Arigo1: String; Artigo2: String);
+
+     function ArrayContains(const MyArray: array of Integer; ValueToCheck: Integer): Boolean;
+
+  public
+    { Public declarations }
+  end;
+
+var
+  F_Start: TF_Start;
+
+implementation
+
+{$R *.dfm}
+
+
+{
+
+-> Finalidade do estudo:
+
+O estudo realizado tem por objetivo mensurar de forma clara a eficiência de
+determinadas estruturas de dados e seus métodos disponíveis para verificação de
+pertencimento de elementos. Os testes de desempenho englobam: velocidade em
+preencher as estruturas em questão e verificações de pertencimento utilizando
+os métodos CONTAINS e BINARY SEARCH.
+
+-> Fluxo que o estudo segue:
+
+Fica ao encargo do usuário selecionar qual teste ele deseja realizar.
+Testes de desempenho disponíveis:
+
+List vs Array
+List vs Array vs Dictionary
+List Contains vs List BinarySearch vs Dicionary
+
+Para cada teste, existem dois testes de desempenho que serão realizados
+para cada estrutura presente no teste selecionado: teste de desempenho para
+inserções de elementos dentro da estrutura e teste de verificações de
+pertencimento de determinados valores dentro das estruturas referidas.
+
+Antes do teste escolhido pelo usuário ser iniciado de fato, duas estruturas
+são instanciadas e preenchidas: duas "Listas Base"
+Uma delas com os valores que estarão presentes nas demais estruturas para a
+realização dos testes de desempenho de inserções, e a outra será utilizada
+para as verificações de pertencimento. Graças as "Listas Base" todas as
+estruturas selecionadas para os testes de desempenho terão os mesmos elementos,
+o mesmo comprimento, e os mesmos valores serão buscados nas estruturas
+selecionadas para os testes de pertencimento.
+
+Após preencher as "Listas Base", os testes de desempenho já referidos são
+iniciados e seus resultados são exibidos no componente TMEMO após a finalização
+dos mesmos.
+
+OBS:
+As "Listas Base" não possuem duplicações de valores, para não impossibilitar o
+funcionamento das estruturas implementadas do tipo TDictionary
+e não impedir o melhor funcionamento do método BINARY SEARCH; além de permitir
+com que os testes sejam minimamente dinâmicos.
+
+As descrições das funcionalidades e intenções dos métodos implementados estão
+sob o cabeçalho dos mesmos no contexto de implementação.
+
+Documentação:
+https://docwiki.embarcadero.com/Libraries/Sydney/en/System.Generics.Collections
+
+}
+
+
+// Exibe no componente 'TMEMO' os resultados do teste de desempenho de INSERÇÕES
+// realizadas na estrutura selecionada
+procedure TF_Start.ExibeRelatorioInsercoes(NumeroElementosEstrutura: Integer;
+Segundos: Integer; Estrutura: String);
+begin
+     Memo_Resultados.Lines.Add('');
+     Memo_Resultados.Lines.Add('Foram adicionados ' +
+        IntToStr(NumeroElementosEstrutura) + ' elementos na ' + Estrutura);
+     Memo_Resultados.Lines.Add('Tempo decorrido para realizar as opeções de inserção ' +
+        IntToStr(Segundos) + ' segundos');
+end;
+
+procedure TF_Start.FormShow(Sender: TObject);
+begin
+
+end;
+
+// Exibe no componente 'TMEMO' os resultados do teste de desempenho relativo
+// as verificações de pertencimento realizados na estrutura selecionada
+procedure TF_Start.ExibeRelatorioDesempenho
+(NumeroElementosEstrutura: Integer; NumeroDeBuscas: Integer;
+MetodoBusca: String ;Segundos: Integer; Estrutura: String;
+Arigo1: String; Artigo2: String);
+begin
+     Memo_Resultados.Lines.Add('');
+     Memo_Resultados.Lines.Add(Arigo1 + ' ' + Estrutura + ' possui ' +
+        IntToStr(NumeroElementosEstrutura) + ' elementos');
+     Memo_Resultados.Lines.Add('Foram ' + IntToStr(NumeroDeBuscas) +
+        ' verificações de pertencimento ' + Artigo2 + ' ' + Estrutura +
+        ' utilizando o método ' + MetodoBusca);
+     Memo_Resultados.Lines.Add('Tempo decorrido para as verificações de pertencimento: ' +
+        IntToStr(Segundos) + ' segundos');
+end;
+
+// Lista base utilizada para preencher as demais estruturas, seja um Array,
+// TList ou Dictionary. Essa Lista base é única e seu valor é repassado para
+// as demais estruturas para que todas possuam o mesmo conteúdo, impedindo desta
+// forma distorções involuntárias relativas ao número de elementos e como estão
+// organizados nas estrutudas testadas
+procedure TF_Start.PreparaListaBase(var ListaBase: TList<Integer>; TamanhoAproximadoLista: Integer);
+Var
+   NumeroAleatorio : Integer;
+   i               : Integer;
+begin
+     // Inicializa o gerador de números aleatórios
+     Randomize;
+
+     for i := 0 to TamanhoAproximadoLista do
+      begin
+           // Gerar número aleatório no intervalo de 0 a 1000000
+           NumeroAleatorio := Random(1000001);
+
+           if not ListaBase.Contains(NumeroAleatorio) then
+              ListaBase.Add(NumeroAleatorio);
+      end;
+end;
+
+// Método utilizado para inserir e medir o tempo necessário para inserir valores
+// na estrutura TLIST a fim de determinar sua eficiência em receber valores
+procedure TF_Start.PreencheListaDeInteiros(var Lista: TList<Integer>;
+var ListaBase: TList<Integer>; ExibirRelatorioInsercoes: Bool);
+Var
+   NumeroAleatorio : Integer;
+   i               : Integer;
+   ElapsedTime     : TDateTime;
+   StartTime       : TDateTime;
+begin
+     // Cronometro o tempo que leva para inserir valores dentro do TList
+     StartTime := Now;
+
+     for I := 0 to ListaBase.Count - 1 do
+         Lista.Add(ListaBase[i]);
+
+     ElapsedTime := Now - StartTime;
+
+     if ExibirRelatorioInsercoes then
+        ExibeRelatorioInsercoes(Lista.Count, SecondsBetween(StartTime, Now), 'List');
+end;
+
+// TList CONTAINS vs List IndexOF vs TList BINARY SEARCH vs TDictionary CONTAINSKEY
+procedure TF_Start.Pnl_ListContainsvsListIndexOfvsListBinarySearchvsDictionaryClick(
+  Sender: TObject);
+Var
+   ListaBaseInteirosAleatorios       : TList<Integer>;
+   ListaBaseInteirosAleatoriosBuscar : TList<Integer>;
+   ListaInteirosAleatorios           : TList<Integer>;
+   DicionarioInteirosAleatorios      : TDictionary<Integer, Bool>;
+   i                                 : Integer;
+   NumeroAleatorio                   : Integer;
+begin
+     Try
+        Try
+           Memo_Resultados.Lines.Clear;
+           Memo_Resultados.Lines.Add('List Contains vs List Binary Search');
+           Memo_Resultados.Lines.Add('Calculando...');
+
+           // Instancio as estruturas que serão utilizadas como Listas Base.
+           ListaBaseInteirosAleatorios       := TList<Integer>.Create();
+           ListaBaseInteirosAleatoriosBuscar := TList<Integer>.Create();
+
+           // Instancio as estruturas que serão utilizadas nos testes
+           // de desempenho.
+           ListaInteirosAleatorios      := TList<Integer>.Create();
+           DicionarioInteirosAleatorios := TDictionary<Integer, Bool>.Create;
+
+           // Alimenta as listas bases que serão utilizadas como referência
+           // para as operações de alimentação das estruturas testadas e
+           // para verificações de pertencimento.
+           PreparaListaBase(ListaBaseInteirosAleatorios, 600000);
+           PreparaListaBase(ListaBaseInteirosAleatoriosBuscar, 150000);
+
+           // Alimento as estruturas utilizadas nos testes de desempenho
+           PreencheListaDeInteiros(ListaInteirosAleatorios, ListaBaseInteirosAleatorios, true);
+           PreencheDicionarioDeInteiros(DicionarioInteirosAleatorios, ListaBaseInteirosAleatorios, true);
+
+           // Teste de desempenho para TList CONTAINS
+           TesteDesempenhoListaContains(ListaInteirosAleatorios, ListaBaseInteirosAleatoriosBuscar);
+
+           // Precisam ser feitos depois dos demais testes de desempenho,
+           // pois ordena a Lista e isso pode gerar distorções.
+           TesteDesempenhoBinarySearch(ListaInteirosAleatorios, ListaBaseInteirosAleatoriosBuscar);
+           TesteDesempenhoDicionarioContains(DicionarioInteirosAleatorios, ListaBaseInteirosAleatoriosBuscar);
+
+           Memo_Resultados.Lines.Delete(1);
+           Memo_Resultados.Lines.Insert(1, 'Cálculos completos!');
+
+        Finally
+           FreeAndNil(ListaBaseInteirosAleatorios);
+           FreeAndNil(ListaInteirosAleatorios);
+           FreeAndNil(ListaBaseInteirosAleatoriosBuscar);
+        End;
+
+     Except
+      on E: Exception do
+          ShowMessage('Erro inesperado, List Contains vs List Binary Search: ' + E.Message);
+     End;
+end;
+
+
+// Método utilizado para inserir e medir o tempo necessário para inserir valores
+// na estrutura ARRAY a fim de determinar sua eficiência em receber valores
+procedure TF_Start.PreencheArrayDeInteiros
+(var Array_: array of Integer; var ListaBase: TList<Integer>;
+ExibirRelatorioInsercoes: Bool);
+Var
+   NumeroAleatorio : Integer;
+   i               : Integer;
+   ElapsedTime     : TDateTime;
+   StartTime       : TDateTime;
+begin
+     // Cronometro o tempo que leva para inserir valores dentro do array
+     StartTime := Now;
+
+     for I := 0 to ListaBase.Count - 1 do
+         Array_[i] := ListaBase[i];
+
+     ElapsedTime := Now - StartTime;
+
+     // Exibo os relatórios referente as inserções
+     if ExibirRelatorioInsercoes then
+        ExibeRelatorioInsercoes(Length(Array_), SecondsBetween(StartTime, Now), 'Array');
+end;
+
+// Método utilizado para inserir e medir o tempo necessário para inserir valores
+// na estrutura DICTIONARY a fim de determinar sua eficiência em receber valores
+procedure TF_Start.PreencheDicionarioDeInteiros
+(var DicionarioInteirosAleatorios: TDictionary<Integer, Bool>;
+ var ListaBase: TList<Integer>; ExibirRelatorioInsercoes: Bool);
+Var
+   ElapsedTime     : TDateTime;
+   StartTime       : TDateTime;
+   i               : Integer;
+   NumeroAleatorio : Integer;
+begin
+     // Cronometro o tempo que leva para inserir valores dentro do TDictionary
+     StartTime := Now;
+
+     for I := 0 to ListaBase.Count - 1 do
+         DicionarioInteirosAleatorios.Add(ListaBase[i], true);
+
+     ElapsedTime := Now - StartTime;
+
+     if ExibirRelatorioInsercoes then
+      begin
+           ExibeRelatorioInsercoes(DicionarioInteirosAleatorios.Count,
+              SecondsBetween(StartTime, Now), 'Dictionary');
+      end;
+end;
+
+// Método Contains criado manualmente para verificar se determinado elemento
+// já está presente no Array.
+function TF_Start.ArrayContains(const MyArray: array of Integer; ValueToCheck: Integer): Boolean;
+var
+   i: Integer;
+begin
+     Result := False;
+
+     for i := Low(MyArray) to High(MyArray) do
+      begin
+           if MyArray[i] = ValueToCheck then
+            begin
+                 Result := True;
+                 Exit; // Se encontrar o valor, sai do loop
+            end;
+      end;
+end;
+
+// Realiza e exibe os resultados do teste de desempenho de uma TList utilizando
+// o método CONTAINS para verificações de pertencimento.
+procedure TF_Start.TesteDesempenhoListaContains
+(var Lista: TList<Integer>; var ListaInteirosAleatoriosBuscar: TList<Integer>);
+Var
+   ElapsedTime : TDateTime;
+   StartTime   : TDateTime;
+   i           : Integer;
+   Existe      : Bool;
+begin
+     StartTime := Now;
+
+     for i := 0 to ListaInteirosAleatoriosBuscar.Count - 1 do
+         Existe := Lista.Contains(ListaInteirosAleatoriosBuscar[i]);
+
+     ElapsedTime := Now - StartTime;
+
+     ExibeRelatorioDesempenho(Lista.Count, ListaInteirosAleatoriosBuscar.Count,
+        'Contains', SecondsBetween(StartTime, Now), 'List', 'A', 'na');
+end;
+
+// Realiza e exibe os resultados do teste de desempenho de um Array utilizando
+// o método CONTAINS para verificações de pertencimento
+// Observação: o método CONTAINS não é implementado automaticamente pela
+// linguagem; fez-se necessário criar e implementar o método CONTAINS para
+// estrutura de Array.
+procedure TF_Start.TesteDesempenhoArrayContains
+(var Array_: array of Integer; var ListaInteirosAleatoriosBuscar: TList<Integer>);
+Var
+   ElapsedTime : TDateTime;
+   StartTime   : TDateTime;
+   i           : Integer;
+   Existe      : Bool;
+begin
+     StartTime := Now;
+
+     for i := 0 to ListaInteirosAleatoriosBuscar.Count - 1 do
+         Existe := ArrayContains(Array_, ListaInteirosAleatoriosBuscar[i]);
+
+     ElapsedTime := Now - StartTime;
+
+     ExibeRelatorioDesempenho(Length(Array_), ListaInteirosAleatoriosBuscar.Count,
+        'Contains', SecondsBetween(StartTime, Now), 'Array', 'O', 'no');
+end;
+
+// Realiza e exibe os resultados do teste de desempenho de uma TDictionary
+// utilizando o método CONTAINSKEY para verificações de pertencimento.
+procedure TF_Start.TesteDesempenhoDicionarioContains
+(var Dicionario: TDictionary<Integer, Bool>;
+var ListaInteirosAleatoriosBuscar: TList<Integer>);
+Var
+   ElapsedTime : TDateTime;
+   StartTime   : TDateTime;
+   i           : Integer;
+begin
+     StartTime := Now;
+
+     for i := 0 to ListaInteirosAleatoriosBuscar.Count - 1 do
+         Dicionario.ContainsKey(ListaInteirosAleatoriosBuscar[i]);
+
+     ElapsedTime := Now - StartTime;
+
+     ExibeRelatorioDesempenho(Dicionario.Count, ListaInteirosAleatoriosBuscar.Count,
+        'ContainsKey', SecondsBetween(StartTime, Now), 'Dicionario', 'O', 'no');
+end;
+
+procedure TF_Start.TesteDesempenhoIndexOF(var Lista,
+  ListaInteirosAleatoriosBuscar: TList<Integer>);
+Var
+   ElapsedTime : TDateTime;
+   StartTime   : TDateTime;
+   i           : Integer;
+   Valor      : Integer;
+begin
+     StartTime := Now;
+
+     for i := 0 to ListaInteirosAleatoriosBuscar.Count - 1 do
+         Valor := Lista.IndexOf(ListaInteirosAleatoriosBuscar[i]);
+
+     ElapsedTime := Now - StartTime;
+
+     ExibeRelatorioDesempenho(Lista.Count, ListaInteirosAleatoriosBuscar.Count,
+        'IndexOf', SecondsBetween(StartTime, Now), 'List', 'A', 'na');
+end;
+
+// Realiza e exibe os resultados do teste de desempenho de uma TList
+// utilizando o método BINARY SEARCH para verificações de pertencimento.
+procedure TF_Start.TesteDesempenhoBinarySearch
+(var Lista: TList<Integer>; var ListaInteirosAleatoriosBuscar: TList<Integer>);
+Var
+   i                     : Integer;
+   indiceValorEncontrado : Integer;
+   ElapsedTime           : TDateTime;
+   StartTime             : TDateTime; 
+begin
+     // BinarySearch retorna o índice do valor encontrado ou um valor negativo 
+     // se o valor não for encontrado
+     indiceValorEncontrado := 0;
+
+     // O cronometro deve começar no momento em que a lista precisa ser 
+     // ordenada, pois é uma operação obrigatória para o BinarySearch
+     // funcionar e o tempo utilizado para realiza-la deve ser contabilizado
+     StartTime := Now;
+
+     Lista.Sort();
+
+     for I := 0 to ListaInteirosAleatoriosBuscar.Count - 1  do
+         Lista.BinarySearch(ListaInteirosAleatoriosBuscar[i], indiceValorEncontrado);	 
+       
+     ElapsedTime := Now - StartTime;
+
+     ExibeRelatorioDesempenho(Lista.Count, ListaInteirosAleatoriosBuscar.Count,
+        'BinarySearch', SecondsBetween(StartTime, Now), 'List', 'A', 'na');
+end;
+
+// TList vs Array
+procedure TF_Start.Btn_ListvsArrayClick(Sender: TObject);
+Var
+   ListaBaseInteirosAleatorios        : TList<Integer>;
+   ListaBaseInteirosAleatoriosBuscar  : TList<Integer>;
+   ListaInteirosAleatorios            : TList<Integer>;
+   ArrayNumerosAleatorios             : array of Integer;
+   i                                  : Integer;
+   NumeroAleatorio                    : Integer;
+begin
+     Try
+        Try
+           Memo_Resultados.Lines.Clear;
+           Memo_Resultados.Lines.Add('List vs Array');
+           Memo_Resultados.Lines.Add('Calculando...');
+
+           // Instancio as estruturas que serão utilizadas nos como
+           // Listas Base
+           ListaBaseInteirosAleatorios       := TList<Integer>.Create();
+           ListaBaseInteirosAleatoriosBuscar := TList<Integer>.Create();
+
+           // Instancio a estrutura que será utilizada nos testes
+           // de desempenho.
+           ListaInteirosAleatorios := TList<Integer>.Create();
+
+           // Alimenta as listas bases que serão utilizadas como referência
+           // para as operações de alimentação das estruturas testadas e
+           // para verificações de pertencimento
+           PreparaListaBase(ListaBaseInteirosAleatorios, 400000);
+           PreparaListaBase(ListaBaseInteirosAleatoriosBuscar, 100000);
+
+           // Determino que o Array terá a mesma quantidade de itens que a
+           // Lista Base
+           SetLength(ArrayNumerosAleatorios, ListaBaseInteirosAleatorios.Count);
+
+           // Alimento as estruturas utilizadas nos testes de desempenhoS
+           PreencheListaDeInteiros(ListaInteirosAleatorios, ListaBaseInteirosAleatorios, true);
+           PreencheArrayDeInteiros(ArrayNumerosAleatorios, ListaBaseInteirosAleatorios, true);
+
+           // Realizo testes de desempenho para ações de verificação
+           // de pertencimento.
+           TesteDesempenhoListaContains(ListaInteirosAleatorios, ListaBaseInteirosAleatoriosBuscar);
+           TesteDesempenhoArrayContains(ArrayNumerosAleatorios, ListaBaseInteirosAleatoriosBuscar);
+
+           Memo_Resultados.Lines.Delete(1);
+           Memo_Resultados.Lines.Insert(1, 'Cálculos completos!');
+
+        Finally
+            FreeAndNil(ListaBaseInteirosAleatorios);
+            FreeAndNil(ListaInteirosAleatorios);
+            FreeAndNil(ListaBaseInteirosAleatoriosBuscar);
+            ArrayNumerosAleatorios := Nil;
+        End;
+
+     Except
+      on E: Exception do
+         ShowMessage('Erro inesperado, List vs Array: ' + E.Message);
+     End;
+end;
+
+// TList vs Array vs TDictionary
+procedure TF_Start.Btn_ListvsArrayvsDictionaryClick(Sender: TObject);
+Var
+   ListaBaseInteirosAleatorios       : TList<Integer>;
+   ListaBaseInteirosAleatoriosBuscar : TList<Integer>;
+   ListaInteirosAleatorios           : TList<Integer>;
+   ArrayNumerosAleatorios            : array of Integer;
+   DicionarioInteirosAleatorios      : TDictionary<Integer, Bool>;
+   i                                 : Integer;
+   NumeroAleatorio                   : Integer;
+begin
+     Try
+        Try
+           Memo_Resultados.Lines.Clear;
+           Memo_Resultados.Lines.Add('List vs Array vs Dictionary');
+           Memo_Resultados.Lines.Add('Calculando...');
+
+           // Instancio as estruturas que serão utilizadas nos como
+           // Listas Base
+           ListaBaseInteirosAleatorios   := TList<Integer>.Create();
+           ListaBaseInteirosAleatoriosBuscar := TList<Integer>.Create();
+
+           // Instancio as estruturas que serão utilizadas nos testes
+           // de desempenho.
+           ListaInteirosAleatorios       := TList<Integer>.Create();
+           DicionarioInteirosAleatorios := TDictionary<Integer, Bool>.Create;
+
+           // Alimento as listas bases que serão utilizadas como referência
+           // para as operações de alimentação das estruturas testadas e
+           // para verificações de pertencimento
+           PreparaListaBase(ListaBaseInteirosAleatorios, 400000);
+           PreparaListaBase(ListaBaseInteirosAleatoriosBuscar, 100000);
+
+           // Alimento as estruturas utilizadas nos testes de desempenho e
+           // determino que o Array terá a mesma quantidade de itens que a
+           // Lista Base
+           PreencheListaDeInteiros(ListaInteirosAleatorios, ListaBaseInteirosAleatorios, true);
+           SetLength(ArrayNumerosAleatorios, ListaBaseInteirosAleatorios.Count);
+           PreencheArrayDeInteiros(ArrayNumerosAleatorios, ListaBaseInteirosAleatorios, true);
+           PreencheDicionarioDeInteiros(DicionarioInteirosAleatorios, ListaBaseInteirosAleatorios, true);
+
+           // Realizo testes de desempenho para ações de verificação
+           // de pertencimento.
+           TesteDesempenhoListaContains(ListaInteirosAleatorios, ListaBaseInteirosAleatoriosBuscar);
+           TesteDesempenhoArrayContains(ArrayNumerosAleatorios, ListaBaseInteirosAleatoriosBuscar);
+           TesteDesempenhoDicionarioContains(DicionarioInteirosAleatorios, ListaBaseInteirosAleatoriosBuscar);
+
+           Memo_Resultados.Lines.Delete(1);
+           Memo_Resultados.Lines.Insert(1, 'Cálculos completos!');
+
+        Finally
+            FreeAndNil(ListaBaseInteirosAleatorios);
+            FreeAndNil(ListaInteirosAleatorios);
+            FreeAndNil(ListaBaseInteirosAleatoriosBuscar);
+            FreeAndNil(DicionarioInteirosAleatorios);
+            ArrayNumerosAleatorios := Nil;
+        End;
+
+     Except
+       on E: Exception do
+          ShowMessage('Erro inesperado, TList vs Array vs TDictionary: ' + E.Message);
+     End;
+end;
+
+end.

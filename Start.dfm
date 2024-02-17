@@ -2,7 +2,7 @@ object F_Start: TF_Start
   Left = 0
   Top = 0
   Caption = 'Start'
-  ClientHeight = 510
+  ClientHeight = 612
   ClientWidth = 880
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -39,10 +39,10 @@ object F_Start: TF_Start
     ParentFont = False
   end
   object Memo_Resultados: TMemo
-    Left = 364
+    Left = 369
     Top = 0
-    Width = 516
-    Height = 510
+    Width = 511
+    Height = 612
     Align = alRight
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -54,12 +54,14 @@ object F_Start: TF_Start
     ParentFont = False
     ReadOnly = True
     TabOrder = 0
+    ExplicitLeft = 365
+    ExplicitHeight = 509
   end
   object Btn_ListvsArray: TButton
     Left = 5
     Top = 169
     Width = 354
-    Height = 25
+    Height = 30
     Caption = 'List vs Array'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -74,7 +76,7 @@ object F_Start: TF_Start
     Left = 5
     Top = 210
     Width = 354
-    Height = 28
+    Height = 30
     Caption = 'List vs Array vs Dictionary'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -85,20 +87,43 @@ object F_Start: TF_Start
     TabOrder = 2
     OnClick = Btn_ListvsArrayvsDictionaryClick
   end
-  object Btn_ListContainsvsListBinarySearchvsDictionary: TButton
+  object Pnl_ListContainsvsListIndexOfvsListBinarySearchvsDictionary: TPanel
     Left = 5
-    Top = 254
+    Top = 256
     Width = 354
-    Height = 25
-    Cancel = True
-    Caption = 'List Contains vs List BinarySearch vs Dictionary'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Arial'
-    Font.Style = []
-    ParentFont = False
+    Height = 60
+    Cursor = crHandPoint
+    ParentBackground = False
+    ParentColor = True
     TabOrder = 3
-    OnClick = Btn_ListContainsvsListBinarySearchvsDictionaryClick
+    OnClick = Pnl_ListContainsvsListIndexOfvsListBinarySearchvsDictionaryClick
+    object Label1: TLabel
+      Left = 69
+      Top = 9
+      Width = 220
+      Height = 18
+      Caption = 'List Contains vs List IndexOF vs'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = Pnl_ListContainsvsListIndexOfvsListBinarySearchvsDictionaryClick
+    end
+    object Label2: TLabel
+      Left = 70
+      Top = 33
+      Width = 216
+      Height = 18
+      Caption = 'List BinarySearch vs Dictionary'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = Pnl_ListContainsvsListIndexOfvsListBinarySearchvsDictionaryClick
+    end
   end
 end

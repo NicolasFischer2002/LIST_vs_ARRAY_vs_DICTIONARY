@@ -1,0 +1,125 @@
+object F_Start: TF_Start
+  Left = 0
+  Top = 0
+  Caption = 'Start'
+  ClientHeight = 510
+  ClientWidth = 880
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poScreenCenter
+  TextHeight = 15
+  object Lbl_Titulo: TLabel
+    Left = 74
+    Top = 53
+    Width = 215
+    Height = 18
+    Caption = 'Estruturas de dados em Delphi'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Style = [fsUnderline]
+    ParentFont = False
+  end
+  object Lbl_ComprarEstruturas: TLabel
+    Left = 68
+    Top = 131
+    Width = 222
+    Height = 18
+    Caption = 'Qual compara'#231#227'o deseja fazer?'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Memo_Resultados: TMemo
+    Left = 369
+    Top = 0
+    Width = 511
+    Height = 510
+    Align = alRight
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Style = []
+    Lines.Strings = (
+      'Resultados')
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 0
+    ExplicitLeft = 365
+    ExplicitHeight = 509
+  end
+  object Btn_ListvsArray: TButton
+    Left = 5
+    Top = 169
+    Width = 354
+    Height = 30
+    Caption = 'List vs Array'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    OnClick = Btn_ListvsArrayClick
+  end
+  object Btn_ListvsArrayvsDictionary: TButton
+    Left = 5
+    Top = 210
+    Width = 354
+    Height = 30
+    Caption = 'List vs Array vs Dictionary'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = Btn_ListvsArrayvsDictionaryClick
+  end
+  object Pnl_ListContainsvsListIndexOfvsListBinarySearchvsDictionary: TPanel
+    Left = 5
+    Top = 256
+    Width = 354
+    Height = 60
+    Color = clScrollBar
+    ParentBackground = False
+    TabOrder = 3
+    object Label1: TLabel
+      Left = 69
+      Top = 9
+      Width = 220
+      Height = 18
+      Caption = 'List Contains vs List IndexOF vs'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 70
+      Top = 33
+      Width = 216
+      Height = 18
+      Caption = 'List BinarySearch vs Dictionary'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+    end
+  end
+end
